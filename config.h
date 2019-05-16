@@ -4,7 +4,7 @@
 #define CONFIG_H
 
 #include <map>
-#include <string>
+#include <sstream>
 
 std::string list_of_operators[] = { "+", "-", "*", "/", "^", "(", ")", "ln", "lg", "sin",
                                     "cos", "tan", "cotan", "asin", "acos",

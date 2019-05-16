@@ -8,6 +8,16 @@
 #include <cmath>
 #include "config.h"
 
+//Convert one char symbol to string
+std::string convert_to_string(char mychar)
+{
+    std::stringstream ss;
+    std::string target;
+    ss << mychar;
+    ss >> target;
+    return target;
+}
+
 //Is string a number
 int is_digit(std::string str)
 {
@@ -73,10 +83,12 @@ std::vector<int> pos_in_expression(std::string str, std::string substr)
         {
             pos = i;
             j = 1;
-            i++;
             // Exception if minus is not an operator
-            if ((i<=str.length()-1) && (substr == "-") && (is_digit(std::to_string(str[i+1]))))
+            if ((is_operator(convert_to_string(str[i-1])) || (i==0)))
+            {
                 pos = -1;
+            }
+            i++;
             /* Make sure we found an operator
                (All operator characters are equal to characters in the string. */
             while (j < (int)substr.length())
@@ -161,6 +173,7 @@ void parse_expression(std::string &expression)
     }
 
     trim_str(expression);
+    std::cout << expression << std::endl;
 }
 
 // Returns the expression converted to Polish notation in the form of a list
