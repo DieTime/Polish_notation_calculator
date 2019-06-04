@@ -6,9 +6,11 @@
 #include <map>
 #include <sstream>
 
-std::string list_of_operators[] = { "+", "-", "*", "/", "^", "(", ")", "ln", "lg", "sin",
+std::string list_of_operators[] = { "+", "-", "*", "/", "^", "(", ")","deg", "rad", "ln", "lg", "sin",
                                     "cos", "tan", "cotan", "asin", "acos",
                                     "atan", "acot", "sqrt"};
+
+std::string list_of_inverse_trigonometric_operators[] = {"asin", "acos","atan", "acot"};
 
 std::map <std::string, int> priority{ {"+", 1},  {"-", 1}, {"*", 2},  {"/", 2}, {"^", 3}, // Operations priority
                                       {"sin", 4},  {"cos", 4},  {"tan", 4}, {"cotan", 4},

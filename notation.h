@@ -19,7 +19,7 @@ std::string convert_to_string(char mychar)
 }
 
 //Is string a number
-int is_digit(std::string str)
+int is_digit(const std::string& str)
 {
     /* If char from str isn't in ['1','2','3','4','5','6','7','8','9','0','.', '-']
        then str isn't a digit */
@@ -36,6 +36,18 @@ int is_operator(const std::string &a)
 {
     // Parsing the list of operators and looking for matches
     for (const std::string &i : list_of_operators)
+    {
+        if (a == i)
+            return true;
+    }
+    return false;
+}
+
+// Check if the string is an operator
+int is_inverse_trigonometric(const std::string &a)
+{
+    // Parsing the list of operators and looking for matches
+    for (const std::string &i : list_of_inverse_trigonometric_operators)
     {
         if (a == i)
             return true;
@@ -84,7 +96,7 @@ std::vector<int> pos_in_expression(std::string str, std::string substr)
             pos = i;
             j = 1;
             // Exception if minus is not an operator
-            if ((is_operator(convert_to_string(str[i-1])) || (i==0)))
+            if ((str[i] == '-') & (is_operator(convert_to_string(str[i-1])) || (i==0)))
             {
                 pos = -1;
             }
@@ -121,8 +133,8 @@ void parse_expression(std::string &expression)
     // Translate a string to lower case
     transform(expression.begin(), expression.end(), expression.begin(), ::tolower);
 
-    // Parse in incomplete list of operators { "+", "-", "*", "/", "^", "(", ")", "ln", "lg" }
-    for (int i = 0; i <= 8; i++)
+    // Parse in incomplete list of operators { "+", "-", "*", "/", "^", "(", ")", "deg", "rad", "ln", "lg" }
+    for (int i = 0; i <= 10; i++)
     {
         // Getting list of operator positions
         positions = pos_in_expression(expression, list_of_operators[i]);
@@ -140,40 +152,57 @@ void parse_expression(std::string &expression)
         }
     }
 
-    // Replace all "pi" constants
     std::string::size_type n=0;
+
+    //Convert all degrees to radians
+    n = 0;
+    while ((n = expression.find("deg", n)) != std::string::npos)
+    {
+        expression.replace(n, 3, " / 180 * pi");
+        n += 11;
+    }
+
+    //Remove all radian notation
+    n = 0;
+    while ((n = expression.find("rad", n)) != std::string::npos)
+    {
+        expression.replace(n, 3, "");
+    }
+
+    // Replace all "pi" constants
+    n = 0;
     while ((n = expression.find("pi", n)) != std::string::npos)
     {
         expression.replace(n, 2, "3.141592653589793238462643");
         n += 26;
     }
 
-    n = 0;
     // Replace all exponent degrees
+    n = 0;
     while ((n = expression.find("exp (", n)) != std::string::npos)
     {
         expression.replace(n, 5, "2.71828182845904523536 ^ (");
         n += 26;
     }
 
+    //Replace all "exp" constants
     n = 0;
-    // //Replace all "exp" constants
     while ((n = expression.find("exp", n)) != std::string::npos)
     {
         expression.replace(n, 3, "2.71828182845904523536");
         n += 22;
     }
 
-    n = 0;
     //Replace all "e" constants
-    while ((n = expression.find('e', n)) != std::string::npos)
+    n = 0;
+    while (((n = expression.find('e', n)) != std::string::npos) && (expression[n-1]!='d'))
     {
         expression.replace(n, 1, "2.71828182845904523536");
         n += 22;
     }
 
     trim_str(expression);
-    std::cout << expression << std::endl;
+    //std::cout << expression << std::endl;
 }
 
 // Returns the expression converted to Polish notation in the form of a list
@@ -267,6 +296,7 @@ std::string get_answer(std::vector<std::string> notation)
     std::vector <double> answer; // Result of calculations
     double temp; // Temp variable for calculating
     std::string result;
+    std::string answer_dimension = "";
 
     //Parse polish notation
     for (const std::string &str : notation)
@@ -351,7 +381,7 @@ std::string get_answer(std::vector<std::string> notation)
                     result = "error";
                     break;
                 }
-                temp = std::sin(answer[answer.size() - 1] * Pi / 180);
+                temp = std::sin(answer[answer.size() - 1]);
                 answer.pop_back();
                 answer.push_back(static_cast<float &&>(temp));
             }
@@ -362,7 +392,7 @@ std::string get_answer(std::vector<std::string> notation)
                     result = "error";
                     break;
                 }
-                temp = std::cos(answer[answer.size() - 1] * Pi / 180);
+                temp = std::cos(answer[answer.size() - 1]);
                 answer.pop_back();
                 answer.push_back(temp);
             }
@@ -373,7 +403,7 @@ std::string get_answer(std::vector<std::string> notation)
                     result = "error";
                     break;
                 }
-                temp = std::tan(answer[answer.size() - 1] * Pi / 180);
+                temp = std::tan(answer[answer.size() - 1]);
                 answer.pop_back();
                 answer.push_back(temp);
             }
@@ -384,7 +414,7 @@ std::string get_answer(std::vector<std::string> notation)
                     result = "error";
                     break;
                 }
-                temp = 1 / std::tan(answer[answer.size() - 1] * Pi / 180);
+                temp = 1 / std::tan(answer[answer.size() - 1]);
                 answer.pop_back();
                 answer.push_back(temp);
             }
@@ -395,7 +425,7 @@ std::string get_answer(std::vector<std::string> notation)
                     result = "error";
                     break;
                 }
-                temp = std::asin(answer[answer.size() - 1]) * 180.0 / Pi;
+                temp = std::asin(answer[answer.size() - 1]);
                 answer.pop_back();
                 answer.push_back(temp);
             }
@@ -406,7 +436,7 @@ std::string get_answer(std::vector<std::string> notation)
                     result = "error";
                     break;
                 }
-                temp = std::acos(answer[answer.size() - 1]) * 180.0 / Pi;
+                temp = std::acos(answer[answer.size() - 1]);
                 answer.pop_back();
                 answer.push_back(temp);
             }
@@ -417,7 +447,7 @@ std::string get_answer(std::vector<std::string> notation)
                     result = "error";
                     break;
                 }
-                temp = std::atan(answer[answer.size() - 1] * Pi / 180);
+                temp = std::atan(answer[answer.size() - 1]);
                 answer.pop_back();
                 answer.push_back(temp);
             }
@@ -428,7 +458,7 @@ std::string get_answer(std::vector<std::string> notation)
                     result = "error";
                     break;
                 }
-                temp = 1 / std::atan(answer[answer.size() - 1] * Pi / 180);
+                temp = 1 / std::atan(answer[answer.size() - 1]);
                 answer.pop_back();
                 answer.push_back(temp);
             }
@@ -467,14 +497,21 @@ std::string get_answer(std::vector<std::string> notation)
             }
         }
     }
+
+    //if answer in radians & answer != NaN
+    if ((is_inverse_trigonometric(notation[notation.size()-1])) && not(std::isnan(answer[0])))
+        answer_dimension = " rad";
+
+    // If no error move the answer [0] to result
     if ((result != "error") && (result != "zero_exception"))
-        result = std::to_string(answer[0]);
+        result = std::to_string(answer[0]) + answer_dimension;
+
     // Return the answer that lies in 1 cell of the array
     return result;
 }
 
 //Brackets validation
-int check_brackets(std::string expression)
+int check_brackets(const std::string& expression)
 {
     int count = 0; // Count of unclosed brackets
 
