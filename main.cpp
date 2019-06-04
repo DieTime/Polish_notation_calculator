@@ -23,7 +23,6 @@ int main()
         if (!correct_expression(expression))
         {
             cout << "Incorrect expression\n" << endl;
-            system("pause");
             continue;
         }
 

@@ -4,8 +4,9 @@
 #define NOTATION_H
 
 #include <algorithm>
-#include <vector>
 #include <cmath>
+#include <vector>
+#include <sstream>
 #include "config.h"
 
 //Convert one char symbol to string
@@ -134,7 +135,7 @@ void parse_expression(std::string &expression)
     transform(expression.begin(), expression.end(), expression.begin(), ::tolower);
 
     // Parse in incomplete list of operators { "+", "-", "*", "/", "^", "(", ")", "deg", "rad", "ln", "lg" }
-    for (int i = 0; i <= 10; i++)
+    for (int i = 0; i <= number_of_operators_for_parsing; i++)
     {
         // Getting list of operator positions
         positions = pos_in_expression(expression, list_of_operators[i]);
@@ -152,57 +153,19 @@ void parse_expression(std::string &expression)
         }
     }
 
-    std::string::size_type n=0;
-
-    //Convert all degrees to radians
-    n = 0;
-    while ((n = expression.find("deg", n)) != std::string::npos)
+    //Replace all constants
+    std::string::size_type n;
+    for (std::string& i : constants)
     {
-        expression.replace(n, 3, " / 180 * pi");
-        n += 11;
-    }
-
-    //Remove all radian notation
-    n = 0;
-    while ((n = expression.find("rad", n)) != std::string::npos)
-    {
-        expression.replace(n, 3, "");
-    }
-
-    // Replace all "pi" constants
-    n = 0;
-    while ((n = expression.find("pi", n)) != std::string::npos)
-    {
-        expression.replace(n, 2, "3.141592653589793238462643");
-        n += 26;
-    }
-
-    // Replace all exponent degrees
-    n = 0;
-    while ((n = expression.find("exp (", n)) != std::string::npos)
-    {
-        expression.replace(n, 5, "2.71828182845904523536 ^ (");
-        n += 26;
-    }
-
-    //Replace all "exp" constants
-    n = 0;
-    while ((n = expression.find("exp", n)) != std::string::npos)
-    {
-        expression.replace(n, 3, "2.71828182845904523536");
-        n += 22;
-    }
-
-    //Replace all "e" constants
-    n = 0;
-    while (((n = expression.find('e', n)) != std::string::npos) && (expression[n-1]!='d'))
-    {
-        expression.replace(n, 1, "2.71828182845904523536");
-        n += 22;
+        n = 0;
+        while ((n = expression.find(i, n)) != std::string::npos)
+        {
+            expression.replace(n, i.size(), replaceable_constants[i]);
+            n += replaceable_constants[i].size();
+        }
     }
 
     trim_str(expression);
-    //std::cout << expression << std::endl;
 }
 
 // Returns the expression converted to Polish notation in the form of a list
@@ -296,7 +259,7 @@ std::string get_answer(std::vector<std::string> notation)
     std::vector <double> answer; // Result of calculations
     double temp; // Temp variable for calculating
     std::string result;
-    std::string answer_dimension = "";
+    std::string answer_dimension;
 
     //Parse polish notation
     for (const std::string &str : notation)
