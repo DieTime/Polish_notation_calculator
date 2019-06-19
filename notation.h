@@ -462,7 +462,7 @@ std::string get_answer(std::vector<std::string> notation)
     }
 
     //if answer in radians & answer != NaN
-    if ((is_inverse_trigonometric(notation[notation.size()-1])) && not(std::isnan(answer[0])))
+    if ((is_inverse_trigonometric(notation[notation.size()-1])) && !(std::isnan(answer[0])))
         answer_dimension = " rad";
 
     // If no error move the answer [0] to result
