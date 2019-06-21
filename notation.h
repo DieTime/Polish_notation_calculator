@@ -346,7 +346,7 @@ std::string get_answer(std::vector<std::string> notation)
                 }
                 temp = std::sin(answer[answer.size() - 1]);
                 answer.pop_back();
-                answer.push_back(static_cast<float &&>(temp));
+                answer.push_back(temp);
             }
             if (str == "cos")
             {
