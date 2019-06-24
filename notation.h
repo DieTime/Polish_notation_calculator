@@ -98,11 +98,12 @@ std::vector<int> pos_in_expression(std::string str, std::string substr)
 			j = 1;
 
 			// Exception if minus is not an operator
-			if ((str[i] == '-') && (i==0))
-				pos = -1;	
-			else if ((str[i] == '-') && (is_operator(convert_to_string(str[i - 1]))))
+			if ((str[i] == '-') && (i==0)){
 				pos = -1;
-
+			}
+			else if ((str[i] == '-') && (i != 0) && (str[i-1] == ' ')) {
+				pos = -1; 
+			}
 			i++;
 			/* Make sure we found an operator
 			   (All operator characters are equal to characters in the string. */

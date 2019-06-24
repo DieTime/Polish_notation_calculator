@@ -6,7 +6,7 @@
 #include <map>
 
 std::string list_of_operators[]={
-        "+", "-", "*", "/", "^", "(", ")","deg", "rad", "ln", "lg", "sin",
+        "+", "*", "/", "^", "(", ")","deg", "rad", "ln", "lg", "-", "sin",
         "cos", "tan", "cotan", "asin", "acos","atan", "acot", "sqrt"};
 
 std::string list_of_inverse_trigonometric_operators[] = {"asin", "acos","atan", "acot"};
