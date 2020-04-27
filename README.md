@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://i.ibb.co/6rMJwYR/1.png" width="380">
+  <img src="https://i.ibb.co/qxjZFYp/1.png" width="380">
 </p>
 <p align="center">
   <img src="https://img.shields.io/badge/version-1.0.0-green.svg?style=flat-square" alt="version">
