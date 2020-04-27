@@ -1,2 +1,2 @@
-/out/build/x64-Debug
-/.vs
+.idea
+cmake-build-debug

@@ -1,19 +1,40 @@
-## **RPN-Calculator**
-String calculator using reverse polish notation
+<p align="center">
+  <img src="https://i.ibb.co/6rMJwYR/1.png" width="380">
+</p>
+<p align="center">
+  <img src="https://img.shields.io/badge/version-1.0.0-green.svg?style=flat-square" alt="version">
+</p>
 
-#### Supports:
+# RPN-Calculator
+Calculator using Reverse Polish notation
+
+### Supports:
 
 1) Operators: `+, -, *, /, ^, (, )`
 2) Functions: `ln(x), lg(x), sin(x), cos(x), tan(x), cotan(x), asin(x), acos(x), atan(x), acot(x), sqrt(x), exp(x)`
-3) `Work with deg and rad` // example sin(30 deg)
-4) `Auto-formatting of the entered text` (works without extra spaces between operators ,functions and constants)
-5) Constants: exp and pi
+3) `Work with deg and rad`
+4) `Auto-formatting entered text`
+5) Constants: `exp` and `pi`
 
-#### Main functions:
+### Example:
+```cpp
+#include <iostream>
+#include "RPN/RPN.h"
 
-1) `int correct_expression(std::string &expression)` //Expression validation and changes the expression to the correct form
-2) `void parse_expression(std::string &expression)` //Modifies the expression to the correct form
-3) `vector <std::string> to_polish_notation(std::string &expression)` // Returns the RPN as a list. Only works with parsed expressions(after the parse_expression function)
-4) `string get_answer(std::vector<std::string> notation)` //Gets an answer from the Polish notation if it's possible
+using namespace std;
 
-#### Enjoy😉
+int main() {
+    RPN expr("sin(30 deg) + 5^2 - ln(10)");
+
+    // Get expression in reverse polish notation
+    vector<string> notation = expr.getNotation();
+
+    // Get expression and solution
+    cout << "Solution of " << expr.getExpression() << " is " << expr.solve() << endl;
+
+    cin >> expr; // Set expression
+    cout << expr; // Get solution
+
+    return 0;
+}
+```
