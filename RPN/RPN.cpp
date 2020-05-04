@@ -350,7 +350,11 @@ void RPN::setExpression(const std::string& expr) {
 }
 
 std::vector<std::string> RPN::getNotation() {
-    return toPolish(toCorrectExpression(expression));
+    if (!expression.empty()) {
+        return toPolish(toCorrectExpression(expression));
+    } else {
+        throw std::runtime_error("The expression is not correct");
+    }
 }
 
 std::string RPN::solve() {
